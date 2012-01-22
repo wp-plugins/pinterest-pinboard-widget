@@ -105,6 +105,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         ?>
         <style type="text/css">
         .widget_pinterest-pinboard-widget .row { width: 200px; height: 65px; }
+        .widget_pinterest-pinboard-widget .pinboard { margin-top: 10px; }
         .widget_pinterest-pinboard-widget .pinboard img { width: 61px; height: 61px; padding: 0 4px 4px 0; }
         .widget_pinterest-pinboard-widget .pin_link { padding-top: 5px; }
         .widget_pinterest-pinboard-widget .pin_text { vertical-align: super; }
