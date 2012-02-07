@@ -151,6 +151,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             <span class="pin_text"><a href="http://pinterest.com/<?= $username ?>/">More Pins</a></span>
         </div>
         </div>
+        <!-- PluginID: <? $this->id ?> // Version: <?= $this->get_version() ?> -->
         <?php
         echo($after_widget);
     }
@@ -170,6 +171,16 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         $maxitems = $rss->get_item_quantity($nrpins);
         $rss_items = $rss->get_items(0, $maxitems);
         return $rss_items;
+    }
+    
+    /**
+     * Determine the running plugin's version.
+     * This version is displayed in the HTML source for debugging purposes.
+     */
+    function get_version() {
+        $plugin_data = get_plugin_data( __FILE__ );
+        $plugin_version = $plugin_data['Version'];
+        return $plugin_version;
     }
 
 }
