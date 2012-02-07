@@ -5,7 +5,7 @@ Plugin Name: Pinterest Pinboard Widget
 Description: Add a Pinterest Pinboard widget to WordPress.
 Author: CodeFish
 Author URI: http://www.codefish.nl
-Version: 1.0.0
+Version: 1.0.1
 */
 
 /*  Copyright 2012 CodeFish (email: info at codefish.nl)
