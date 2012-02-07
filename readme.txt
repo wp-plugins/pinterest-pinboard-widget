@@ -1,15 +1,15 @@
 === Plugin Name ===
 Contributors: codefish
-Tags: pinterest, pinboard
+Tags: pinterest, pinboard, widget
 Requires at least: 3.0
 Tested up to: 3.3.1
 Stable tag: trunk
 
-A simple widget that displays a Pinterest pinboard in the template sidebar.
+A simple must-have widget for the Pinterest addict! Displays thumbnails of your latest Pinterest pins on your website.
 
 == Description ==
 
-Display a Pinterest pinboard widget on your WordPress site much like the pinboards on Pinterest.
+This plugin adds a Pinterest widget much like the pinboards on Pinterest. It uses the original thumbnails from Pinterest itself. The plugin aims to have the same look and feel as the pinboords on Pinterest. To improve your site's performance, the pins are cached every 15 minutes.
 
 == Installation ==
 
@@ -18,7 +18,27 @@ Display a Pinterest pinboard widget on your WordPress site much like the pinboar
 1. A new "Pinterest Pinboard" widget will be available under Appearance > Widgets.
 1. Add it to your sidebar and edit settings of the plugin
 
+== Frequently Asked Questions ==
+
+= My latest pins are not showing on my website  =
+
+The Pinterest Pinboard Widget caches the RSS feed from Pinterest itself every 15 minutes. This improves loading time of your website, but may show a new pin with a slight delay. A just added pin also takes some time to show up in Pinterest's RSS feed.
+
+= Can I disable caching? =
+
+In the current version caching is always enabled (15 minutes). Future versions of the plugin will allow you to set the caching interval or disable caching completely.
+
+= Can I add a Follow Me button? =
+
+The current version show a 'more pins' link only. Future versions of the plugin will have more choices of buttons provided by Pinterest.
+
+== Screenshots ==
+
+1. Settings of the widget under: Appearance > Widgets
+2. This is the Pinterest Pinboard widget in the sidebar of the Twenty Eleven WordPress theme
+
 == Changelog ==
 
 = 1.0.0 =
+
 * Initial version
