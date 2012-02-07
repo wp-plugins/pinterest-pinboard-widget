@@ -60,6 +60,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
                     'description' => $this->widget['description']
                 )
         );
+        $this->widget['start_time'] = microtime();
     }
     
     function form($instance) {
@@ -103,6 +104,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         $title = apply_filters('widget_title', $instance['title']);
         echo($before_title . $title . $after_title);
         ?>
+        <div id="pinterest-pinboard-widget-container">
         <style type="text/css">
         #pinterest-pinboard-widget-container .row { width: 200px; height: 65px; }
         #pinterest-pinboard-widget-container .pinboard { margin-top: 10px; }
@@ -111,7 +113,6 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         #pinterest-pinboard-widget-container .pin_text { vertical-align: super; }
         #pinterest-pinboard-widget-container .pin_text a { color: #999; }
         </style>
-        <div id="pinterest-pinboard-widget-container">
         <div class="pinboard">
         <?php
 
@@ -151,8 +152,8 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             <span class="pin_text"><a href="http://pinterest.com/<?= $username ?>/">More Pins</a></span>
         </div>
         </div>
-        <!-- PluginID: <? $this->id ?> // Version: <?= $this->get_version() ?> -->
         <?php
+        echo($this->footer());
         echo($after_widget);
     }
     
@@ -175,12 +176,26 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
     
     /**
      * Determine the running plugin's version.
-     * This version is displayed in the HTML source for debugging purposes.
      */
     function get_version() {
-        $plugin_data = get_plugin_data( __FILE__ );
+        $headers = array(
+            'Version' => 'Version'
+        );
+        $plugin_data = get_file_data(__FILE__, $headers);
         $plugin_version = $plugin_data['Version'];
         return $plugin_version;
+    }
+
+    /**
+     * Render HTML comment footer for debugging purposes.
+     */
+    function footer() {
+        $execution_time = microtime() - $this->widget['start_time'];
+        return '<!-- '.
+               'Plugin ID: '. $this->id .' // '.
+               'Version: '. $this->get_version() .' // '.
+               'Execution Time: '. $execution_time .' '.
+               "-->\n";
     }
 
 }
