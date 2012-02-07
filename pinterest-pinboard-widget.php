@@ -101,16 +101,17 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         extract($args);
         echo($before_widget);
         $title = apply_filters('widget_title', $instance['title']);
-        echo $before_title . $title . $after_title;
+        echo($before_title . $title . $after_title);
         ?>
         <style type="text/css">
-        .widget_pinterest-pinboard-widget .row { width: 200px; height: 65px; }
-        .widget_pinterest-pinboard-widget .pinboard { margin-top: 10px; }
-        .widget_pinterest-pinboard-widget .pinboard img { width: 61px; height: 61px; padding: 0 4px 4px 0; }
-        .widget_pinterest-pinboard-widget .pin_link { padding-top: 5px; }
-        .widget_pinterest-pinboard-widget .pin_text { vertical-align: super; }
-        .widget_pinterest-pinboard-widget .pin_text a { color: #999; }
+        #pinterest-pinboard-widget-container .row { width: 200px; height: 65px; }
+        #pinterest-pinboard-widget-container .pinboard { margin-top: 10px; }
+        #pinterest-pinboard-widget-container .pinboard img { width: 61px; height: 61px; padding: 0 4px 4px 0; }
+        #pinterest-pinboard-widget-container .pin_link { padding-top: 5px; }
+        #pinterest-pinboard-widget-container .pin_text { vertical-align: super; }
+        #pinterest-pinboard-widget-container .pin_text a { color: #999; }
         </style>
+        <div id="pinterest-pinboard-widget-container">
         <div class="pinboard">
         <?php
 
@@ -148,6 +149,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         <div class="pin_link">
             <a class="pin_logo" href="http://pinterest.com/<?= $username ?>/"><img src="http://passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" /></a>
             <span class="pin_text"><a href="http://pinterest.com/<?= $username ?>/">More Pins</a></span>
+        </div>
         </div>
         <?php
         echo($after_widget);
