@@ -50,6 +50,9 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             // Pinterest base url.
             'pinterest_url' => 'http://pinterest.com'
     );
+    
+    var $start_time;
+    var $protocol;
 
     function Pinterest_Pinboard_Widget() {
         $id = str_replace('_', '-', get_class($this));
@@ -60,7 +63,8 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
                     'description' => $this->widget['description']
                 )
         );
-        $this->widget['start_time'] = microtime();
+        $this->start_time = microtime(true);
+        $this->protocol = $this->is_secure() ? 'https://' : 'http://';
     }
     
     function form($instance) {
@@ -127,6 +131,12 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         } else {
             // Render the pinboard.
             $count = 0;
+            $search = array('_b.jpg');
+            $replace = array('_t.jpg');
+            if ($this->is_secure) {
+                array_push($search, 'http://');
+                array_push($replace, $this->protocol);
+            }
             foreach ( $rss_items as $item ) {
                 if ($count == 0) {
                     echo("<div class=\"row\">");
@@ -135,7 +145,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
                 $description = $item->get_description();
                 $url = $item->get_permalink();
                 if (preg_match_all('/<img src="(.*)".*>/i', $description, $matches)) {
-                    $image = str_replace('_b.jpg', '_t.jpg', $matches[1][0]);
+                    $image = str_replace($search, $replace, $matches[1][0]);
                 }
                 echo("<a href=\"$url\"><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
                 $count++;
@@ -148,12 +158,14 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         ?>
         </div>
         <div class="pin_link">
-            <a class="pin_logo" href="http://pinterest.com/<?= $username ?>/"><img src="http://passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" /></a>
+            <a class="pin_logo" href="<?= $this->protocol ?>pinterest.com/<?= $username ?>/">
+                <img src="<?= $this->widget['protocol'] ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
+            </a>
             <span class="pin_text"><a href="http://pinterest.com/<?= $username ?>/">More Pins</a></span>
         </div>
         </div>
         <?php
-        echo($this->footer());
+        echo($this->get_footer());
         echo($after_widget);
     }
     
@@ -189,14 +201,23 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
     /**
      * Render HTML comment footer for debugging purposes.
      */
-    function footer() {
-        $execution_time = microtime() - $this->widget['start_time'];
+    function get_footer() {
+        $execution_time = (microtime(true) - $this->start_time) * 1e6;
         return '<!-- '.
                'Plugin ID: '. $this->id .' // '.
                'Version: '. $this->get_version() .' // '.
-               'Execution Time: '. $execution_time .' '.
+               'Execution Time: '. $execution_time .' (ms) '.
                "-->\n";
     }
+    
+    /**
+     * Check if the server is running SSL.
+     */
+    function is_secure() {
+        return !empty($_SERVER['HTTPS'])
+            && $_SERVER['HTTPS'] !== 'off'
+            || $_SERVER['SERVER_PORT'] == 443;
+    } 
 
 }
 
