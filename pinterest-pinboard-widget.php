@@ -144,7 +144,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
                 $title = $item->get_title();
                 $description = $item->get_description();
                 $url = $item->get_permalink();
-                if (preg_match_all('/<img src="(.*)".*>/i', $description, $matches)) {
+                if (preg_match_all('/<img src="([^"]*)".*>/i', $description, $matches)) {
                     $image = str_replace($search, $replace, $matches[1][0]);
                 }
                 echo("<a href=\"$url\"><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
@@ -159,7 +159,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         </div>
         <div class="pin_link">
             <a class="pin_logo" href="<?= $this->protocol ?>pinterest.com/<?= $username ?>/">
-                <img src="<?= $this->widget['protocol'] ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
+                <img src="<?= $this->protocol ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
             </a>
             <span class="pin_text"><a href="http://pinterest.com/<?= $username ?>/">More Pins</a></span>
         </div>
