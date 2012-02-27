@@ -49,6 +49,9 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             // Pinterest base url.
             'pinterest_url' => 'http://pinterest.com'
     );
+    
+    var $start_time;
+    var $protocol;
 
     function Pinterest_Pinboard_Widget() {
         $id = str_replace('_', '-', get_class($this));
@@ -59,7 +62,8 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
                     'description' => $this->widget['description']
                 )
         );
-        $this->widget['start_time'] = microtime();
+        $this->start_time = microtime(true);
+        $this->protocol = $this->is_secure() ? 'https://' : 'http://';
     }
     
     function form($instance) {
@@ -120,22 +124,19 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         $rows = $instance['rows'];
         $cols = $instance['cols'];
         $nr_pins = $rows * $cols;
-        $rss_items = $this->get_pins($username, $nr_pins);
-        if (is_null($rss_items)) {
-            echo("Unable to load Pinterest pins for '$username'");
+        $pins = $this->get_pins($username, $nr_pins);
+        if (is_null($pins)) {
+            echo("Unable to load Pinterest pins for '$username'\n");
         } else {
             // Render the pinboard.
             $count = 0;
-            foreach ( $rss_items as $item ) {
+            foreach ($pins as $pin) {
                 if ($count == 0) {
                     echo("<div class=\"row\">");
                 }
-                $title = $item->get_title();
-                $description = $item->get_description();
-                $url = $item->get_permalink();
-                if (preg_match_all('/<img src="(.*)".*>/i', $description, $matches)) {
-                    $image = str_replace('_b.jpg', '_t.jpg', $matches[1][0]);
-                }
+                $title = $pin['title'];
+                $url = $pin['url'];
+                $image = $pin['image'];
                 echo("<a href=\"$url\"><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
                 $count++;
                 if ($count >= $cols) {
@@ -147,15 +148,21 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         ?>
         </div>
         <div class="pin_link">
-            <a class="pin_logo" href="http://pinterest.com/<?= $username ?>/"><img src="http://passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" /></a>
-            <span class="pin_text"><a href="http://pinterest.com/<?= $username ?>/">More Pins</a></span>
+            <a class="pin_logo" href="<?php echo($this->protocol) ?>pinterest.com/<?php echo($username) ?>/">
+                <img src="<?php echo($this->protocol) ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
+            </a>
+            <span class="pin_text"><a href="http://pinterest.com/<?php echo($username) ?>/">More Pins</a></span>
         </div>
         </div>
         <?php
-        echo($this->footer());
+        echo($this->get_footer());
         echo($after_widget);
     }
     
+    /**
+     * Retrieve RSS feed for username, and parse the data needed from it.
+     * Returns null on error, otherwise a hash of pins.
+     */
     function get_pins($username, $nrpins) {
 
         // Set caching.
@@ -170,7 +177,35 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         
         $maxitems = $rss->get_item_quantity($nrpins);
         $rss_items = $rss->get_items(0, $maxitems);
-        return $rss_items;
+        
+        $pins;
+        if (is_null($rss_items)) {
+            $pins = null;
+        } else {
+            // Pattern to replace for the images.
+            $search = array('_b.jpg');
+            $replace = array('_t.jpg');
+            // Add http replace is running secure.
+            if ($this->is_secure) {
+                array_push($search, 'http://');
+                array_push($replace, $this->protocol);
+            }
+            $pins = array();
+            foreach ($rss_items as $item) {
+                $title = $item->get_title();
+                $description = $item->get_description();
+                $url = $item->get_permalink();
+                if (preg_match_all('/<img src="([^"]*)".*>/i', $description, $matches)) {
+                    $image = str_replace($search, $replace, $matches[1][0]);
+                }
+                array_push($pins, array(
+                    title => $title,
+                    image => $image,
+                    url => $url
+                ));
+            }
+        }
+        return $pins;
     }
     
     /**
@@ -188,14 +223,23 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
     /**
      * Render HTML comment footer for debugging purposes.
      */
-    function footer() {
-        $execution_time = microtime() - $this->widget['start_time'];
+    function get_footer() {
+        $execution_time = (microtime(true) - $this->start_time) * 1e6;
         return '<!-- '.
                'Plugin ID: '. $this->id .' // '.
                'Version: '. $this->get_version() .' // '.
-               'Execution Time: '. $execution_time .' '.
+               'Execution Time: '. $execution_time .' (ms) '.
                "-->\n";
     }
+    
+    /**
+     * Check if the server is running SSL.
+     */
+    function is_secure() {
+        return !empty($_SERVER['HTTPS'])
+            && $_SERVER['HTTPS'] !== 'off'
+            || $_SERVER['SERVER_PORT'] == 443;
+    } 
 
 }
 
