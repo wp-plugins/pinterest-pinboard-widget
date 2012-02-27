@@ -125,28 +125,19 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         $rows = $instance['rows'];
         $cols = $instance['cols'];
         $nr_pins = $rows * $cols;
-        $rss_items = $this->get_pins($username, $nr_pins);
-        if (is_null($rss_items)) {
-            echo("Unable to load Pinterest pins for '$username'");
+        $pins = $this->get_pins($username, $nr_pins);
+        if (is_null($pins)) {
+            echo("Unable to load Pinterest pins for '$username'\n");
         } else {
             // Render the pinboard.
             $count = 0;
-            $search = array('_b.jpg');
-            $replace = array('_t.jpg');
-            if ($this->is_secure) {
-                array_push($search, 'http://');
-                array_push($replace, $this->protocol);
-            }
-            foreach ( $rss_items as $item ) {
+            foreach ($pins as $pin) {
                 if ($count == 0) {
                     echo("<div class=\"row\">");
                 }
-                $title = $item->get_title();
-                $description = $item->get_description();
-                $url = $item->get_permalink();
-                if (preg_match_all('/<img src="([^"]*)".*>/i', $description, $matches)) {
-                    $image = str_replace($search, $replace, $matches[1][0]);
-                }
+                $title = $pin['title'];
+                $url = $pin['url'];
+                $image = $pin['image'];
                 echo("<a href=\"$url\"><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
                 $count++;
                 if ($count >= $cols) {
@@ -169,6 +160,10 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         echo($after_widget);
     }
     
+    /**
+     * Retrieve RSS feed for username, and parse the data needed from it.
+     * Returns null on error, otherwise a hash of pins.
+     */
     function get_pins($username, $nrpins) {
 
         // Set caching.
@@ -183,7 +178,35 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         
         $maxitems = $rss->get_item_quantity($nrpins);
         $rss_items = $rss->get_items(0, $maxitems);
-        return $rss_items;
+        
+        $pins;
+        if (is_null($rss_items)) {
+            $pins = null;
+        } else {
+            // Pattern to replace for the images.
+            $search = array('_b.jpg');
+            $replace = array('_t.jpg');
+            // Add http replace is running secure.
+            if ($this->is_secure) {
+                array_push($search, 'http://');
+                array_push($replace, $this->protocol);
+            }
+            $pins = array();
+            foreach ($rss_items as $item) {
+                $title = $item->get_title();
+                $description = $item->get_description();
+                $url = $item->get_permalink();
+                if (preg_match_all('/<img src="([^"]*)".*>/i', $description, $matches)) {
+                    $image = str_replace($search, $replace, $matches[1][0]);
+                }
+                array_push($pins, array(
+                    title => $title,
+                    image => $image,
+                    url => $url
+                ));
+            }
+        }
+        return $pins;
     }
     
     /**
