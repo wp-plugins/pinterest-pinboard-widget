@@ -2,6 +2,7 @@
 
 /*
 Plugin Name: Pinterest Pinboard Widget
+Plugin URI: http://wordpress.org/extend/plugins/pinterest-pinboard-widget/
 Description: Add a Pinterest Pinboard widget to WordPress.
 Author: CodeFish
 Author URI: http://www.codefish.nl
