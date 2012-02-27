@@ -149,10 +149,10 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         ?>
         </div>
         <div class="pin_link">
-            <a class="pin_logo" href="<?= $this->protocol ?>pinterest.com/<?= $username ?>/">
-                <img src="<?= $this->protocol ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
+            <a class="pin_logo" href="<?php echo($this->protocol) ?>pinterest.com/<?php echo($username) ?>/">
+                <img src="<?php echo($this->protocol) ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
             </a>
-            <span class="pin_text"><a href="http://pinterest.com/<?= $username ?>/">More Pins</a></span>
+            <span class="pin_text"><a href="http://pinterest.com/<?php echo($username) ?>/">More Pins</a></span>
         </div>
         </div>
         <?php
