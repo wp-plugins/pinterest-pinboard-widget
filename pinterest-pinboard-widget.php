@@ -112,7 +112,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         <style type="text/css">
         #pinterest-pinboard-widget-container .row { width: 200px; height: 65px; }
         #pinterest-pinboard-widget-container .pinboard { margin-top: 10px; }
-        #pinterest-pinboard-widget-container .pinboard img { width: 61px; height: 61px; padding: 0 4px 4px 0; }
+        #pinterest-pinboard-widget-container .pinboard img { display: inline; width: 61px; height: 61px; padding: 0 4px 4px 0; }
         #pinterest-pinboard-widget-container .pin_link { padding-top: 5px; }
         #pinterest-pinboard-widget-container .pin_text { vertical-align: super; }
         #pinterest-pinboard-widget-container .pin_text a { color: #999; }
