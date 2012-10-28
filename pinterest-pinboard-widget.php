@@ -109,14 +109,6 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         echo($before_title . $title . $after_title);
         ?>
         <div id="pinterest-pinboard-widget-container">
-        <style type="text/css">
-        #pinterest-pinboard-widget-container .row { width: 200px; height: 65px; }
-        #pinterest-pinboard-widget-container .pinboard { margin-top: 10px; }
-        #pinterest-pinboard-widget-container .pinboard img { display: inline; width: 61px; height: 61px; padding: 0 4px 4px 0; }
-        #pinterest-pinboard-widget-container .pin_link { padding-top: 5px; }
-        #pinterest-pinboard-widget-container .pin_text { vertical-align: super; }
-        #pinterest-pinboard-widget-container .pin_text a { color: #999; }
-        </style>
         <div class="pinboard">
         <?php
 
@@ -246,5 +238,13 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
 
 // Register the widget.
 add_action('widgets_init', create_function('', 'return register_widget("Pinterest_Pinboard_Widget");'));
+
+// Register plugin stylesheet.
+function pinterest_pinboard_widget_css() {
+    wp_register_style('pinterest-pinboard-widget-style', plugins_url('style.css', __FILE__));
+    wp_enqueue_style('pinterest-pinboard-widget-style');
+}
+
+add_action('wp_enqueue_scripts', 'pinterest_pinboard_widget_css');
 
 ?>
