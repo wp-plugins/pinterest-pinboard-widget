@@ -40,6 +40,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             'username' => 'pinterest',
             'rows' => 3,
             'cols' => 3,
+            'new_window' => false,
 
             // The widget description used in the admin area.
             'description' => 'Adds a Pinterest Pinboard widget to your sidebar',
@@ -73,6 +74,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         $username = array_key_exists('username', $instance) ? esc_attr($instance['username']) : $this->widget['username'];
         $cols = array_key_exists('cols', $instance) ? esc_attr($instance['cols']) : $this->widget['cols'];
         $rows = array_key_exists('rows', $instance) ? esc_attr($instance['rows']) : $this->widget['rows'];
+        $new_window = array_key_exists('new_window', $instance) ? esc_attr($instance['new_window']) : $this->widget['new_window'];
         ?>
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
@@ -90,6 +92,10 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             <label for="<?php echo $this->get_field_id('rows'); ?>"><?php _e('Nr. of pins tall:'); ?></label>
             <input id="<?php echo $this->get_field_id('rows'); ?>" name="<?php echo $this->get_field_name('rows'); ?>" type="text" value="<?php echo $rows; ?>" size="3" />
         </p>
+        <p>
+            <input id="<?php echo $this->get_field_id('new_window'); ?>" name="<?php echo $this->get_field_name('new_window'); ?>" type="checkbox" <?php if ($new_window) { ?>checked="checked" <?php } ?> />
+            <label for="<?php echo $this->get_field_id('new_window'); ?>"><?php _e('Open links in a new window?:'); ?></label>
+        </p>        
         <?php
     }
 
