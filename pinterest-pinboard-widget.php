@@ -48,8 +48,8 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             // RSS cache lifetime in seconds.
             'cache_lifetime' => 900,
 
-            // Pinterest base url.
-            'pinterest_url' => 'http://pinterest.com'
+            // Pinterest url
+            'pinterest_feed_url' => 'http://pinterest.com/%s/feed.rss'
     );
     
     var $start_time;
@@ -174,7 +174,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         add_filter('wp_feed_cache_transient_lifetime', create_function('$a', 'return '. $this->widget['cache_lifetime'] .';'));
 
         // Get the RSS feed.
-        $url = $this->widget['pinterest_url'] .'/'. $username .'/feed.rss';
+        $url = sprintf($this->widget['pinterest_feed_url'], $username);
         $rss = fetch_feed($url);
         if (is_wp_error($rss)) {
             return null;
