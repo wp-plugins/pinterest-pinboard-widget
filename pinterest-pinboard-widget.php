@@ -40,6 +40,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             'username' => 'pinterest',
             'rows' => 3,
             'cols' => 3,
+            'new_window' => 0,
 
             // The widget description used in the admin area.
             'description' => 'Adds a Pinterest Pinboard widget to your sidebar',
@@ -47,8 +48,8 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             // RSS cache lifetime in seconds.
             'cache_lifetime' => 900,
 
-            // Pinterest base url.
-            'pinterest_url' => 'http://pinterest.com'
+            // Pinterest url
+            'pinterest_feed_url' => 'http://pinterest.com/%s/feed.rss'
     );
     
     var $start_time;
@@ -73,6 +74,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         $username = array_key_exists('username', $instance) ? esc_attr($instance['username']) : $this->widget['username'];
         $cols = array_key_exists('cols', $instance) ? esc_attr($instance['cols']) : $this->widget['cols'];
         $rows = array_key_exists('rows', $instance) ? esc_attr($instance['rows']) : $this->widget['rows'];
+        $new_window = array_key_exists('new_window', $instance) ? esc_attr($instance['new_window']) : $this->widget['new_window'];
         ?>
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
@@ -90,6 +92,10 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             <label for="<?php echo $this->get_field_id('rows'); ?>"><?php _e('Nr. of pins tall:'); ?></label>
             <input id="<?php echo $this->get_field_id('rows'); ?>" name="<?php echo $this->get_field_name('rows'); ?>" type="text" value="<?php echo $rows; ?>" size="3" />
         </p>
+        <p>
+            <input id="<?php echo $this->get_field_id('new_window'); ?>" name="<?php echo $this->get_field_name('new_window'); ?>" type="checkbox" <?php if ($new_window) { ?>checked="checked" <?php } ?> />
+            <label for="<?php echo $this->get_field_id('new_window'); ?>"><?php _e('Open links in a new window?'); ?></label>
+        </p>        
         <?php
     }
 
@@ -99,6 +105,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         $instance['username'] = strip_tags($new_instance['username']);
         $instance['rows'] = strip_tags($new_instance['rows']);
         $instance['cols'] = strip_tags($new_instance['cols']);
+        $instance['new_window'] = isset($new_instance['new_window']) ? 1 : 0;
         return $instance;
     }
     
@@ -106,54 +113,51 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         extract($args);
         echo($before_widget);
         $title = apply_filters('widget_title', $instance['title']);
-        echo($before_title . $title . $after_title);
+        echo($before_title . __($title) . $after_title);
         ?>
         <div id="pinterest-pinboard-widget-container">
-        <style type="text/css">
-        #pinterest-pinboard-widget-container .row { width: 200px; height: 65px; }
-        #pinterest-pinboard-widget-container .pinboard { margin-top: 10px; }
-        #pinterest-pinboard-widget-container .pinboard img { width: 61px; height: 61px; padding: 0 4px 4px 0; }
-        #pinterest-pinboard-widget-container .pin_link { padding-top: 5px; }
-        #pinterest-pinboard-widget-container .pin_text { vertical-align: super; }
-        #pinterest-pinboard-widget-container .pin_text a { color: #999; }
-        </style>
-        <div class="pinboard">
-        <?php
+            <div class="pinboard">
+            <?php
 
-        // Get the RSS.
-        $username = $instance['username'];
-        $rows = $instance['rows'];
-        $cols = $instance['cols'];
-        $nr_pins = $rows * $cols;
-        $pins = $this->get_pins($username, $nr_pins);
-        if (is_null($pins)) {
-            echo("Unable to load Pinterest pins for '$username'\n");
-        } else {
-            // Render the pinboard.
-            $count = 0;
-            foreach ($pins as $pin) {
-                if ($count == 0) {
-                    echo("<div class=\"row\">");
-                }
-                $title = $pin['title'];
-                $url = $pin['url'];
-                $image = $pin['image'];
-                echo("<a href=\"$url\"><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
-                $count++;
-                if ($count >= $cols) {
-                    echo("</div>");
-                    $count = 0;
+            // Get the RSS.
+            $username = $instance['username'];
+            $rows = $instance['rows'];
+            $cols = $instance['cols'];
+            $new_window = $instance['new_window'];
+            $nr_pins = $rows * $cols;
+            $pins = $this->get_pins($username, $nr_pins);
+            if (is_null($pins)) {
+                echo("Unable to load Pinterest pins for '$username'\n");
+            } else {
+                // Render the pinboard.
+                $count = 0;
+                foreach ($pins as $pin) {
+                    if ($count == 0) {
+                        echo("<div class=\"row\">");
+                    }
+                    $title = $pin['title'];
+                    $url = $pin['url'];
+                    $image = $pin['image'];
+                    echo("<a href=\"$url\"");
+                    if ($new_window) {
+                        echo(" target=\"_blank\"");
+                    }
+                    echo("><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
+                    $count++;
+                    if ($count >= $cols) {
+                        echo("</div>");
+                        $count = 0;
+                    }
                 }
             }
-        }
-        ?>
-        </div>
-        <div class="pin_link">
-            <a class="pin_logo" href="<?php echo($this->protocol) ?>pinterest.com/<?php echo($username) ?>/">
-                <img src="<?php echo($this->protocol) ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
-            </a>
-            <span class="pin_text"><a href="http://pinterest.com/<?php echo($username) ?>/">More Pins</a></span>
-        </div>
+            ?>
+            </div>
+            <div class="pin_link">
+                <a class="pin_logo" href="<?php echo($this->protocol) ?>pinterest.com/<?php echo($username) ?>/">
+                    <img src="<?php echo($this->protocol) ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
+                </a>
+                <span class="pin_text"><a href="http://pinterest.com/<?php echo($username) ?>/" <?php if ($new_window) { ?>target="_blank"<?php } ?>><?php _e("More Pins") ?></a></span>
+            </div>
         </div>
         <?php
         echo($this->get_footer());
@@ -170,7 +174,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         add_filter('wp_feed_cache_transient_lifetime', create_function('$a', 'return '. $this->widget['cache_lifetime'] .';'));
 
         // Get the RSS feed.
-        $url = $this->widget['pinterest_url'] .'/'. $username .'/feed.rss';
+        $url = sprintf($this->widget['pinterest_feed_url'], $username);
         $rss = fetch_feed($url);
         if (is_wp_error($rss)) {
             return null;
@@ -187,7 +191,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             $search = array('_b.jpg');
             $replace = array('_t.jpg');
             // Add http replace is running secure.
-            if ($this->is_secure) {
+            if ($this->is_secure()) {
                 array_push($search, 'http://');
                 array_push($replace, $this->protocol);
             }
@@ -246,5 +250,13 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
 
 // Register the widget.
 add_action('widgets_init', create_function('', 'return register_widget("Pinterest_Pinboard_Widget");'));
+
+// Register plugin stylesheet.
+function pinterest_pinboard_widget_css() {
+    wp_register_style('pinterest-pinboard-widget-style', plugins_url('style.css?v=1', __FILE__));
+    wp_enqueue_style('pinterest-pinboard-widget-style');
+}
+
+add_action('wp_enqueue_scripts', 'pinterest_pinboard_widget_css');
 
 ?>
