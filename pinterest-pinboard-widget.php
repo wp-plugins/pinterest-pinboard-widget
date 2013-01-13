@@ -40,7 +40,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             'username' => 'pinterest',
             'rows' => 3,
             'cols' => 3,
-            'new_window' => false,
+            'new_window' => 0,
 
             // The widget description used in the admin area.
             'description' => 'Adds a Pinterest Pinboard widget to your sidebar',
@@ -94,7 +94,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         </p>
         <p>
             <input id="<?php echo $this->get_field_id('new_window'); ?>" name="<?php echo $this->get_field_name('new_window'); ?>" type="checkbox" <?php if ($new_window) { ?>checked="checked" <?php } ?> />
-            <label for="<?php echo $this->get_field_id('new_window'); ?>"><?php _e('Open links in a new window?:'); ?></label>
+            <label for="<?php echo $this->get_field_id('new_window'); ?>"><?php _e('Open links in a new window?'); ?></label>
         </p>        
         <?php
     }
@@ -105,6 +105,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         $instance['username'] = strip_tags($new_instance['username']);
         $instance['rows'] = strip_tags($new_instance['rows']);
         $instance['cols'] = strip_tags($new_instance['cols']);
+        $instance['new_window'] = isset($new_instance['new_window']) ? 1 : 0;
         return $instance;
     }
     
@@ -122,6 +123,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             $username = $instance['username'];
             $rows = $instance['rows'];
             $cols = $instance['cols'];
+            $new_window = $instance['new_window'];
             $nr_pins = $rows * $cols;
             $pins = $this->get_pins($username, $nr_pins);
             if (is_null($pins)) {
@@ -136,7 +138,11 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
                     $title = $pin['title'];
                     $url = $pin['url'];
                     $image = $pin['image'];
-                    echo("<a href=\"$url\"><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
+                    echo("<a href=\"$url\"");
+                    if ($new_window) {
+                        echo(" target=\"_blank\"");
+                    }
+                    echo("><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
                     $count++;
                     if ($count >= $cols) {
                         echo("</div>");
@@ -150,7 +156,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
                 <a class="pin_logo" href="<?php echo($this->protocol) ?>pinterest.com/<?php echo($username) ?>/">
                     <img src="<?php echo($this->protocol) ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
                 </a>
-                <span class="pin_text"><a href="http://pinterest.com/<?php echo($username) ?>/"><?php _e("More Pins") ?></a></span>
+                <span class="pin_text"><a href="http://pinterest.com/<?php echo($username) ?>/" <?php if ($new_window) { ?>target="_blank"<?php } ?>><?php _e("More Pins") ?></a></span>
             </div>
         </div>
         <?php
