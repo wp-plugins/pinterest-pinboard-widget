@@ -106,46 +106,46 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         extract($args);
         echo($before_widget);
         $title = apply_filters('widget_title', $instance['title']);
-        echo($before_title . $title . $after_title);
+        echo($before_title . __($title) . $after_title);
         ?>
         <div id="pinterest-pinboard-widget-container">
-        <div class="pinboard">
-        <?php
+            <div class="pinboard">
+            <?php
 
-        // Get the RSS.
-        $username = $instance['username'];
-        $rows = $instance['rows'];
-        $cols = $instance['cols'];
-        $nr_pins = $rows * $cols;
-        $pins = $this->get_pins($username, $nr_pins);
-        if (is_null($pins)) {
-            echo("Unable to load Pinterest pins for '$username'\n");
-        } else {
-            // Render the pinboard.
-            $count = 0;
-            foreach ($pins as $pin) {
-                if ($count == 0) {
-                    echo("<div class=\"row\">");
-                }
-                $title = $pin['title'];
-                $url = $pin['url'];
-                $image = $pin['image'];
-                echo("<a href=\"$url\"><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
-                $count++;
-                if ($count >= $cols) {
-                    echo("</div>");
-                    $count = 0;
+            // Get the RSS.
+            $username = $instance['username'];
+            $rows = $instance['rows'];
+            $cols = $instance['cols'];
+            $nr_pins = $rows * $cols;
+            $pins = $this->get_pins($username, $nr_pins);
+            if (is_null($pins)) {
+                echo("Unable to load Pinterest pins for '$username'\n");
+            } else {
+                // Render the pinboard.
+                $count = 0;
+                foreach ($pins as $pin) {
+                    if ($count == 0) {
+                        echo("<div class=\"row\">");
+                    }
+                    $title = $pin['title'];
+                    $url = $pin['url'];
+                    $image = $pin['image'];
+                    echo("<a href=\"$url\"><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
+                    $count++;
+                    if ($count >= $cols) {
+                        echo("</div>");
+                        $count = 0;
+                    }
                 }
             }
-        }
-        ?>
-        </div>
-        <div class="pin_link">
-            <a class="pin_logo" href="<?php echo($this->protocol) ?>pinterest.com/<?php echo($username) ?>/">
-                <img src="<?php echo($this->protocol) ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
-            </a>
-            <span class="pin_text"><a href="http://pinterest.com/<?php echo($username) ?>/">More Pins</a></span>
-        </div>
+            ?>
+            </div>
+            <div class="pin_link">
+                <a class="pin_logo" href="<?php echo($this->protocol) ?>pinterest.com/<?php echo($username) ?>/">
+                    <img src="<?php echo($this->protocol) ?>passets-cdn.pinterest.com/images/small-p-button.png" width="16" height="16" alt="Follow Me on Pinterest" />
+                </a>
+                <span class="pin_text"><a href="http://pinterest.com/<?php echo($username) ?>/"><?php _e("More Pins") ?></a></span>
+            </div>
         </div>
         <?php
         echo($this->get_footer());
