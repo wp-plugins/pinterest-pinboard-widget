@@ -191,7 +191,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
             $search = array('_b.jpg');
             $replace = array('_t.jpg');
             // Add http replace is running secure.
-            if ($this->is_secure) {
+            if ($this->is_secure()) {
                 array_push($search, 'http://');
                 array_push($replace, $this->protocol);
             }
