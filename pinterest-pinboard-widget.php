@@ -241,7 +241,7 @@ add_action('widgets_init', create_function('', 'return register_widget("Pinteres
 
 // Register plugin stylesheet.
 function pinterest_pinboard_widget_css() {
-    wp_register_style('pinterest-pinboard-widget-style', plugins_url('style.css', __FILE__));
+    wp_register_style('pinterest-pinboard-widget-style', plugins_url('style.css?v=1', __FILE__));
     wp_enqueue_style('pinterest-pinboard-widget-style');
 }
 
