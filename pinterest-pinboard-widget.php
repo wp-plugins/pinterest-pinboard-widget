@@ -9,7 +9,7 @@ Author URI: http://www.codefish.nl
 Version: 1.0.3
 */
 
-/*  Copyright 2012 CodeFish (email: info at codefish.nl)
+/*  Copyright 2012-2014 CodeFish (email: info at codefish.nl)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -204,9 +204,9 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
                     $image = str_replace($search, $replace, $matches[1][0]);
                 }
                 array_push($pins, array(
-                    title => $title,
-                    image => $image,
-                    url => $url
+                    'title' => $title,
+                    'image' => $image,
+                    'url' => $url
                 ));
             }
         }

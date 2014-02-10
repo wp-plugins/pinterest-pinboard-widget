@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Pinterest Pinboard Widget ===
 Contributors: codefish
 Tags: pinterest, pinboard, widget
 Requires at least: 3.0
@@ -10,6 +10,11 @@ A simple must-have widget for the Pinterest addict! Displays thumbnails of your 
 == Description ==
 
 This plugin adds a Pinterest widget much like the pinboards on Pinterest. It uses the original thumbnails from Pinterest itself. The plugin aims to have the same look and feel as the pinboords on Pinterest. To improve your site's performance, the pins are cached every 15 minutes.
+
+== Get Involved ==
+
+* Development and pull requests [on GitHub](https://github.com/codefishnl/wordpress-pinterest-pinboard-widget)
+* Bug reports and suggestions on [WordPress.org forums](http://wordpress.org/support/plugin/pinterest-pinboard-widget)
 
 == Installation ==
 
