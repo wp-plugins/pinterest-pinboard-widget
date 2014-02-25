@@ -3,7 +3,7 @@ Contributors: codefish
 Tags: pinterest, pinboard, widget
 Requires at least: 3.0
 Tested up to: 3.3.1
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 
 A simple must-have widget for the Pinterest addict! Displays thumbnails of your latest Pinterest pins on your website.
 
@@ -43,6 +43,10 @@ The current version show a 'more pins' link only. Future versions of the plugin 
 2. This is the Pinterest Pinboard widget in the sidebar of the Twenty Eleven WordPress theme
 
 == Changelog ==
+
+= 1.0.4 =
+
+* Fix PHP notice, see: http://wordpress.org/support/topic/use-of-undefined-constant-1 
 
 = 1.0.3 =
 
