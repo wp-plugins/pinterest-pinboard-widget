@@ -2,8 +2,8 @@
 Contributors: codefish
 Tags: pinterest, pinboard, widget
 Requires at least: 3.0
-Tested up to: 3.3.1
-Stable tag: 1.0.4
+Tested up to: 3.8.1
+Stable tag: 1.0.5
 
 A simple must-have widget for the Pinterest addict! Displays thumbnails of your latest Pinterest pins on your website.
 
@@ -41,7 +41,7 @@ The current version show a 'more pins' link only. Future versions of the plugin 
 
 = I want to add a Pinboard to a page. Is this possible? =
 
-Yes, since verson 1.0.5 the plugin support a shortcode `pinterest_pinboard`. The following argument can be supplied:
+Yes, since version 1.0.5 the plugin support a shortcode `pinterest_pinboard`. The following argument can be supplied:
 
 * username: The pinterest username to retrieve the pins for
 * rows: Nr. of rows of pins to display
@@ -55,7 +55,7 @@ Some examples of the shortcode uses are below. Retrieve 9 pins for user pinteres
 Retrieve 30 pins for user pinterest and open links in a new window:
 
 `[pinterest_pinboard username="pinterest" rows=3 cols=10 new_window=1]`
- 
+
 == Screenshots ==
 
 1. Settings of the widget under: Appearance > Widgets
