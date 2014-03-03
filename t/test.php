@@ -5,39 +5,28 @@ require_once(dirname(__FILE__) .'/mock-wordpress.php');
 require_once(dirname(__FILE__) .'/../pinterest-pinboard-widget.php');
 
 /**
- * Unit tests for class: Pinterest_Pinboard_Widget
+ * Unit tests for class: Pinterest_Pinboard
  */
- 
-class Pinterest_Pinboard_Widget_Tests extends UnitTestCase {
-    
-    function test_is_secure() {
-        $widget = new Pinterest_Pinboard_Widget();
-        $this->assertFalse($widget->is_secure());
-        $_SERVER['HTTPS'] = 'on';
-        $this->assertTrue($widget->is_secure());
-        $_SERVER['HTTPS'] = 'off';
-        $_SERVER['SERVER_PORT'] = 443;
-        $this->assertTrue($widget->is_secure());
-    }
+class Pinterest_Pinboard_Tests extends UnitTestCase {
     
     function test_get_version() {
-        $widget = new Pinterest_Pinboard_Widget();
-        $this->assertEqual($widget->get_version(), '1.0.0');
+        $board = new Pinterest_Pinboard();
+        $this->assertEqual($board->get_version(), '1.0.0');
     }
-    
+
     function test_get_footer() {
-        $widget = new Pinterest_Pinboard_Widget();
+        $board = new Pinterest_Pinboard();
         $this->assertPattern(
-            '<!-- Plugin ID: Pinterest-Pinboard-Widget // Version: 1.0.0 // Execution Time: .* \(ms\) -->',
-            $footer = $widget->get_footer()
+            '<!-- Version: 1.0.0 // Execution Time: .* \(ms\) -->',
+            $footer = $board->get_footer()
         );
     }
     
     function test_get_pins_failure() {
         global $WP_ERROR;
         $WP_ERROR = true;
-        $widget = new Pinterest_Pinboard_Widget();
-        $this->assertNull($widget->get_pins('pinterest', 10), 'Expecting null');
+        $board = new Pinterest_Pinboard();
+        $this->assertNull($board->get_pins('pinterest', 10), 'Expecting null');
     }
     
     function test_get_pins_success() {
@@ -47,10 +36,15 @@ class Pinterest_Pinboard_Widget_Tests extends UnitTestCase {
         $RSS_ITEMS = array(
             new Mock_Rss_Item(
                 'A title',
-                'A description',
+                'A description: <img src="http://codefish.nl/238690848970130635_0YplKTcQ_b.jpg">',
                 'http://www.codefish.nl/'
             )
         );
+        $board = new Pinterest_Pinboard();
+        $pins = $board->get_pins('pinterest', 5);
+        $this->assertNotNull($pins);
+        $this->assertEqual(sizeof($pins), 1);
+        $this->assertEqual($pins[0]['image'], '//codefish.nl/238690848970130635_0YplKTcQ_t.jpg');
     }
     
     /**
@@ -68,13 +62,20 @@ class Pinterest_Pinboard_Widget_Tests extends UnitTestCase {
                 'http://pinterest.com/pin/137500594843095531/'
             )
         );
-        $widget = new Pinterest_Pinboard_Widget();
-        $pins = $widget->get_pins('pinterest', 5);
+        $board = new Pinterest_Pinboard();
+        $pins = $board->get_pins('pinterest', 5);
         $this->assertNotNull($pins);
         $this->assertEqual(sizeof($pins), 1);
-        $this->assertEqual($pins[0]['image'], 'http://media-cdn.pinterest.com/upload/238690848970130635_0YplKTcQ_t.jpg');
+        $this->assertEqual($pins[0]['image'], '//media-cdn.pinterest.com/upload/238690848970130635_0YplKTcQ_t.jpg');
     }
+    
+}
 
+/**
+ * Unit tests for class: Pinterest_Pinboard_Widget
+ */
+class Pinterest_Pinboard_Widget_Tests extends UnitTestCase {
+    
     function test_widget() {
         $args = array();
         $instance = array(

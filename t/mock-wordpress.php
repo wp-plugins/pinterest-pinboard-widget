@@ -24,6 +24,10 @@ function add_filter() {
 
 }
 
+function add_shortcode() {
+    
+}
+
 function apply_filters($filter, $data) {
 
 }
@@ -35,6 +39,14 @@ function is_wp_error() {
 
 function get_file_data() {
     return array('Version' => '1.0.0');
+}
+
+function __($string) {
+    return $string;
+}
+
+function _e($string) {
+    return $string;
 }
 
 // Point to mock feed.php
