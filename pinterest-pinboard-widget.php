@@ -3,10 +3,10 @@
 /*
 Plugin Name: Pinterest Pinboard Widget
 Plugin URI: http://wordpress.org/extend/plugins/pinterest-pinboard-widget/
-Description: Add a Pinterest Pinboard widget to WordPress.
+Description: Add a Pinterest Pinboard widget and shortcode to WordPress.
 Author: CodeFish
 Author URI: http://www.codefish.nl
-Version: 1.0.4
+Version: 1.0.5
 */
 
 /*  Copyright 2012-2014 CodeFish (email: info at codefish.nl)
