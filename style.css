@@ -1,7 +1,13 @@
-#pinterest-pinboard-widget-container .row { height: 65px; }
+#pinterest-pinboard-widget-container .row { width: 195px; height: 65px; }
 #pinterest-pinboard-widget-container .pinboard { margin-top: 10px; }
 #pinterest-pinboard-widget-container .pin_link { padding-top: 5px; }
 #pinterest-pinboard-widget-container .pin_text a { color: #999; text-decoration: none; vertical-align: middle; }
 #pinterest-pinboard-widget-container .pinboard img { width: 61px; height: 61px; padding: 0 4px 4px 0; }
 #pinterest-pinboard-widget-container .pinboard img, #pinterest-pinboard-widget-container .pin_logo img { display: inline; }
 #pinterest-pinboard-widget-container a.pin_logo { text-decoration: none; }
+
+#pinterest-pinboard-container .row { height: 65px; }
+#pinterest-pinboard-container .pin_text a { color: #999; text-decoration: none; vertical-align: middle; }
+#pinterest-pinboard-container .pinboard img { width: 61px; height: 61px; padding: 0 4px 4px 0; }
+#pinterest-pinboard-container a.pin_logo { text-decoration: none; }
+
