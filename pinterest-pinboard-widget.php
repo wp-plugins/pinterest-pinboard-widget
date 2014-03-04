@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/pinterest-pinboard-widget/
 Description: Add a Pinterest Pinboard widget and shortcode to WordPress.
 Author: CodeFish
 Author URI: http://www.codefish.nl
-Version: 1.0.5
+Version: 1.0.6
 */
 
 /*  Copyright 2012-2014 CodeFish (email: info at codefish.nl)
@@ -61,7 +61,6 @@ class Pinterest_Pinboard {
         if (is_null($pins)) {
             echo("Unable to load Pinterest pins for '$username'\n");
         } else {
-            echo("<div id=\"pinterest-pinboard-widget-container\">\n");
             echo("<div class=\"pinboard\">\n");
             $row = 0;
             $col = 0;
@@ -76,7 +75,7 @@ class Pinterest_Pinboard {
                 if ($new_window) {
                     echo(" target=\"_blank\"");
                 }
-                echo("><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>\n");
+                echo("><img src=\"$image\" alt=\"$title\" title=\"$title\" /></a>");
                 $col++;
                 if ($col >= $cols) {
                     echo("</div>\n");
@@ -93,8 +92,7 @@ class Pinterest_Pinboard {
             </a>
             <span class="pin_text"><a href="http://pinterest.com/<?php echo($username) ?>/" <?php if ($new_window) { ?>target="_blank"<?php } ?>><?php _e("More Pins") ?></a></span>
         </div>
-    </div>
-    <?php
+        <?php
         echo($this->get_footer());
     }
     /**
@@ -248,6 +246,7 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
         echo($before_widget);
         $title = apply_filters('widget_title', $instance['title']);
         echo($before_title . __($title) . $after_title);
+        echo("<div id=\"pinterest-pinboard-widget-container\">\n");
 
         // Render the pinboard from the widget settings.
         $username = $instance['username'];
@@ -257,7 +256,8 @@ class Pinterest_Pinboard_Widget extends WP_Widget {
     
         $pinboard = new Pinterest_Pinboard();
         $pinboard->render($username, $rows, $cols, $new_window);
-    
+
+        echo("</div>");
         echo($after_widget);
     }
 
@@ -288,7 +288,8 @@ function pinterest_pinboard_widget_shortcode($atts) {
     ob_start();
     $pinboard = new Pinterest_Pinboard();
     $pinboard->render($a['username'], $a['rows'], $a['cols'], $a['new_window']);
-    return ob_get_clean();
+    $html = ob_get_clean();
+    return "<div id=\"pinterest-pinboard-container\">$html</div>\n";
 }
 add_shortcode(PINTEREST_PINBOARD_SHORTCODE, 'pinterest_pinboard_widget_shortcode');
 
