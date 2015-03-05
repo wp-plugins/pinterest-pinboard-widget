@@ -2,8 +2,8 @@
 Contributors: codefish
 Tags: pinterest, pinboard, widget
 Requires at least: 3.0
-Tested up to: 3.8.1
-Stable tag: 1.0.6
+Tested up to: 4.1.1
+Stable tag: 1.0.7
 
 A simple must-have widget for the Pinterest addict! Displays thumbnails of your latest Pinterest pins on your website.
 
@@ -62,6 +62,10 @@ Retrieve 30 pins for user pinterest and open links in a new window:
 2. This is the Pinterest Pinboard widget in the sidebar of the Twenty Eleven WordPress theme
 
 == Changelog ==
+
+= 1.0.7 =
+
+* Fixed wrong fetch url (caused: Unable to load Pinterest pins for)
 
 = 1.0.6 =
 
