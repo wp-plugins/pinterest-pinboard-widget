@@ -1,4 +1,4 @@
-#pinterest-pinboard-widget-container .row { width: 195px; height: 65px; }
+#pinterest-pinboard-widget-container .row { width: 195px; height: 65px; padding: 0px; margin: 0px; }
 #pinterest-pinboard-widget-container .pinboard { margin-top: 10px; }
 #pinterest-pinboard-widget-container .pin_link { padding-top: 5px; }
 #pinterest-pinboard-widget-container .pin_text a { color: #999; text-decoration: none; vertical-align: middle; }

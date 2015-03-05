@@ -6,7 +6,7 @@ Plugin URI: http://wordpress.org/extend/plugins/pinterest-pinboard-widget/
 Description: Add a Pinterest Pinboard widget and shortcode to WordPress.
 Author: CodeFish
 Author URI: http://www.codefish.nl
-Version: 1.0.6
+Version: 1.0.7
 */
 
 /*  Copyright 2012-2014 CodeFish (email: info at codefish.nl)
@@ -43,7 +43,7 @@ define('PINTEREST_PINBOARD_SHORTCODE', 'pinterest_pinboard');
 class Pinterest_Pinboard {
 
     // Pinterest url
-    var $pinterest_feed_url = 'http://pinterest.com/%s/feed.rss';
+    var $pinterest_feed_url = 'https://pinterest.com/%s/feed.rss';
     
     // RSS cache lifetime in seconds
     var $cache_lifetime = 900;
@@ -124,7 +124,7 @@ class Pinterest_Pinboard {
             $search = array('_b.jpg');
             $replace = array('_t.jpg');
             // Make urls protocol relative
-            array_push($search, 'http://');
+            array_push($search, 'https://');
             array_push($replace, '//');
             
             $pins = array();
